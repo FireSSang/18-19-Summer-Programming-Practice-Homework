@@ -20,6 +20,7 @@ public:
     //界面
     virtual void guide_interface() = 0;
     virtual void input_interface() = 0;
+    virtual void modify_interface() = 0;
     //virtual void query_interface() = 0;
     virtual void error_interface() = 0;
 
@@ -40,7 +41,8 @@ public:
     virtual void input_by_ID() = 0;
     virtual void input_by_name() = 0;
     virtual int check_exist() = 0;
-    virtual void modify_data() = 0;
+    virtual void modify_by_ID() = 0;
+    virtual void modify_by_name() = 0;
     virtual void delete_data() = 0;
 
     //计算加权分数

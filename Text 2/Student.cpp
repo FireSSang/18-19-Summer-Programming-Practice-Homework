@@ -90,7 +90,10 @@ void Student::modify_score(std::string subjectName, double newScore)
     }
 }
 
-
+/**
+ * 计算GPA
+ * 采用天津大学GPA计算方式
+ */
 double Student::calculate_GPA(double singleScore)
 {
     double cred = 0;
@@ -127,6 +130,10 @@ int Student::get_rank()
     return 0;
 }
 
+/**
+ * 检测该学生是否已经录入某一科目信息
+ * 已录入返回true，否则返回false
+ */
 bool Student::check_subject(std::string subjectName)
 {
     for (int i = 0; i < number_of_subjects; ++i)

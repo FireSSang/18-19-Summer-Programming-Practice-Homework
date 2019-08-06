@@ -50,16 +50,56 @@ int Subject::get_number_of_student()
     return number_of_student;
 }
 
-void Subject::set_student_score(std::string studentName, std::string studentID, double studentScore)
+/**
+ * 添加学生信息到该科目下
+ * 添加结束后统计平均分
+ */
+void Subject::set_student_score(std::string studentID, std::string studentName, double studentScore)
 {
     number_of_student++;
     student stud;
-    stud.student_name = studentName;
     stud.student_ID = studentID;
+    stud.student_name = studentName;
     stud.student_score = studentScore;
     stud.student_GPA = calculate_GPA(stud.student_score);
     list.push_back(stud);
+    calculate_average_score();
 }
+
+/**
+ * 修改某一学生成绩
+ * 通过ID修改
+ */
+void Subject::modify_by_ID(std::string studentID, double studentScore)
+{
+    for (int i = 0; i < list.size(); ++i)
+    {
+        if (list[i].student_ID == studentID)
+        {
+            list[i].student_score = studentScore;
+            break;
+        }
+    }
+    calculate_average_score();
+}
+
+/**
+ * 修改某一学生成绩
+ * 通过姓名修改
+ */
+void Subject::modify_by_name(std::string studentName, double studentScore)
+{
+    for (int i = 0; i < list.size(); ++i)
+    {
+        if (list[i].student_name == studentName)
+        {
+            list[i].student_score = studentScore;
+            break;
+        }
+    }
+    calculate_average_score();
+}
+
 
 /**
  * 计算本科目平均分
@@ -74,6 +114,10 @@ void Subject::calculate_average_score()
     average_score = total_score / number_of_student;
 }
 
+/**
+ * 计算GPA
+ * 采用天津大学GPA计算方式
+ */
 double Subject::calculate_GPA(double singleScore)
 {
     double cred = 0;
@@ -99,6 +143,5 @@ double Subject::calculate_GPA(double singleScore)
         cred = 0;
     return cred;
 }
-
 
 

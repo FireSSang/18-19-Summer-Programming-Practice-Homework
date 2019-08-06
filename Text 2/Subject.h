@@ -9,6 +9,7 @@
 
 class Subject
 {
+public:
     Subject();                                                  //无参构造函数
     Subject(std::string, double);                               //含参构造函数
     void set_subject_name(std::string);                         //写入科目名称
@@ -18,6 +19,8 @@ class Subject
     double get_average_score();                                 //获取平均成绩
     int get_number_of_student();                                //获取学生人数
     void set_student_score(std::string, std::string, double);   //录入学生成绩
+    void modify_by_ID(std::string, double);                     //通过学号修改
+    void modify_by_name(std::string, double);                   //通过姓名修改
     void calculate_average_score();                             //计算平均成绩
     double calculate_GPA(double);                               //计算学生绩点
 

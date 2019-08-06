@@ -23,6 +23,7 @@ public:
     //界面
     void guide_interface() override;
     void input_interface() override;
+    void modify_interface() override;
     //void query_interface() override;
     void error_interface() override;
 
@@ -36,6 +37,8 @@ public:
     int find_by_student_ID(std::string student_ID) override;
     int find_by_student_name(std::string student_name) override;
     int find_by_subject_name(std::string subject_name) override;
+
+    //判断重名
     bool is_duplicate_names(std::string student_name) override;
 
     //输入、修改及相关操作
@@ -43,7 +46,8 @@ public:
     void input_by_ID() override;
     void input_by_name() override;
     int check_exist() override;
-    void modify_data() override;
+    void modify_by_ID() override;
+    void modify_by_name() override;
     void delete_data() override;
 
 
