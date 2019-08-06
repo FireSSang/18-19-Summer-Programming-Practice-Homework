@@ -1,0 +1,54 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/18-19 Summer Programming Practice Homework/Text 2/Method.h
+bits/stdc++.h
+-
+
+D:/18-19 Summer Programming Practice Homework/Text 2/Student.cpp
+bits/stdc++.h
+-
+Student.h
+D:/18-19 Summer Programming Practice Homework/Text 2/Student.h
+
+D:/18-19 Summer Programming Practice Homework/Text 2/Student.h
+bits/stdc++.h
+-
+
+D:/18-19 Summer Programming Practice Homework/Text 2/Subject.cpp
+bits/stdc++.h
+-
+Subject.h
+D:/18-19 Summer Programming Practice Homework/Text 2/Subject.h
+
+D:/18-19 Summer Programming Practice Homework/Text 2/Subject.h
+bits/stdc++.h
+-
+
+D:/18-19 Summer Programming Practice Homework/Text 2/System.cpp
+bits/stdc++.h
+-
+System.h
+D:/18-19 Summer Programming Practice Homework/Text 2/System.h
+
+D:/18-19 Summer Programming Practice Homework/Text 2/System.h
+bits/stdc++.h
+-
+Method.h
+D:/18-19 Summer Programming Practice Homework/Text 2/Method.h
+Student.h
+D:/18-19 Summer Programming Practice Homework/Text 2/Student.h
+Subject.h
+D:/18-19 Summer Programming Practice Homework/Text 2/Subject.h
+
+D:/18-19 Summer Programming Practice Homework/Text 2/main.cpp
+bits/stdc++.h
+-
+System.h
+D:/18-19 Summer Programming Practice Homework/Text 2/System.h
+
