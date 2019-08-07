@@ -24,6 +24,7 @@ public:
     void guide_interface() override;
     void input_interface() override;
     void modify_interface() override;
+    void delete_interface() override;
     //void query_interface() override;
     void error_interface() override;
 
@@ -43,12 +44,9 @@ public:
 
     //输入、修改及相关操作
     void add_data() override;
-    void input_by_ID() override;
-    void input_by_name() override;
-    int check_exist() override;
-    void modify_by_ID() override;
-    void modify_by_name() override;
-    void delete_data() override;
+    void input_data(int) override;
+    void modify_data(int) override;
+    void delete_data(int) override;
 
 
 

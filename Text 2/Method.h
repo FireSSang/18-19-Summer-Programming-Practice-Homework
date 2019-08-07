@@ -21,6 +21,7 @@ public:
     virtual void guide_interface() = 0;
     virtual void input_interface() = 0;
     virtual void modify_interface() = 0;
+    virtual void delete_interface() = 0;
     //virtual void query_interface() = 0;
     virtual void error_interface() = 0;
 
@@ -31,19 +32,16 @@ public:
     virtual void output_total_ranking() = 0;
 
     //定位
-    virtual int find_by_student_ID(std::string student_ID) = 0;
-    virtual int find_by_student_name(std::string student_name) = 0;
-    virtual int find_by_subject_name(std::string subject_name) = 0;
-    virtual bool is_duplicate_names(std::string student_name) = 0;
+    virtual int find_by_student_ID(std::string) = 0;
+    virtual int find_by_student_name(std::string) = 0;
+    virtual int find_by_subject_name(std::string) = 0;
+    virtual bool is_duplicate_names(std::string) = 0;
 
     //输入、修改及相关操作
     virtual void add_data() = 0;
-    virtual void input_by_ID() = 0;
-    virtual void input_by_name() = 0;
-    virtual int check_exist() = 0;
-    virtual void modify_by_ID() = 0;
-    virtual void modify_by_name() = 0;
-    virtual void delete_data() = 0;
+    virtual void input_data(int) = 0;
+    virtual void modify_data(int)= 0;
+    virtual void delete_data(int) = 0;
 
     //计算加权分数
     //double calculatine_weighted_scores();

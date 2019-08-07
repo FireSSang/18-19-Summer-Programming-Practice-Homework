@@ -56,7 +56,7 @@ void System::classification()
             {
                 case 1: input_interface();break;
                 case 2: modify_interface();break;
-                case 3: delete_data();break;
+                case 3: delete_interface();break;
                 case 4: query_student();break;
                 case 5: query_subject();break;
                 case 6: output_all_subject();break;
@@ -91,11 +91,12 @@ void System::guide_interface()
  * 输入学生成绩界面
  * 该函数下有三种操作：
  * 1. 添加一名新的学生，并选择是否录入成绩
- *    若该学生已经存在，则会报错
- * 2. 输入学生姓名，并为他添加一门新的成绩信息
- *    若该学生不存在，则询问是否新建该生信息并且录入成绩
- * 3. 输入学生学号，并为他添加一门新的成绩信息
- *    若该学生不存在，则询问是否新建该生信息并且录入成绩
+ *    若该学生已经存在，则报错
+ * 2. 输入学生学号，并为他添加一门新的成绩信息
+ *    若该学生不存在，则报错
+ * 3. 输入学生姓名，并为他添加一门新的成绩信息
+ *    若重名，则报错
+ *    若该学生不存在，则报错
  */
 void System::input_interface()
 {
@@ -117,11 +118,33 @@ void System::input_interface()
         {
             char op;
             op = operation[0];
+            int index_of_student;
             switch ((int)(op - '0'))
             {
                 case 1: add_data();break;
-                case 2: input_by_ID();break;
-                case 3: input_by_name();break;
+                case 2:
+                {
+                    std::cout << "请输入学生学号：" << std::endl;
+                    std::string newStudentID;
+                    std::cin >> newStudentID;
+                    index_of_student = find_by_student_ID(newStudentID);
+                    input_data(index_of_student);
+                    break;
+                }
+                case 3:
+                {
+                    std::cout << "请输入学生姓名：" << std::endl;
+                    std::string newStudentName;
+                    std::cin >> newStudentName;
+                    index_of_student = find_by_student_name(newStudentName);
+                    if (is_duplicate_names(newStudentName))
+                    {
+                        std::cout << "这个姓名存在重名学生，请通过输入学号方式进行添加！" << std::endl;
+                        break;
+                    }
+                    input_data(index_of_student);
+                    break;
+                }
                 case 0: return;
                 default: error_interface();break;
             }
@@ -159,18 +182,100 @@ void System::modify_interface()
         {
             char op;
             op = operation[0];
+            int index_of_student;
             switch ((int)(op - '0'))
             {
-                case 1: modify_by_ID();break;
-                case 2: modify_by_name();break;
+                case 1:
+                {
+                    std::cout << "请输入学生学号：" << std::endl;
+                    std::string newStudentID;
+                    std::cin >> newStudentID;
+                    index_of_student = find_by_student_ID(newStudentID);
+                    modify_data(index_of_student);
+                    break;
+                }
+                case 2:
+                {
+                    std::cout << "请输入学生姓名：" << std::endl;
+                    std::string newStudentName;
+                    std::cin >> newStudentName;
+                    index_of_student = find_by_student_name(newStudentName);
+                    if (is_duplicate_names(newStudentName))
+                    {
+                        std::cout << "这个姓名存在重名学生，请通过输入学号方式进行修改！" << std::endl;
+                        break;
+                    }
+                    modify_data(index_of_student);
+                    break;
+                }
                 case 0: return;
                 default: error_interface();break;
             }
         }
     }
-
 }
 
+/**
+ * 删除学生成绩界面
+ * 该函数下有两种操作：
+ * 1. 输入学生姓名，输入待删除的科目名称并删除
+ *    若该学生不存在，则会报错并返回上一级
+ *    若要删除的科目不存在，则会报错并返回上一级
+ * 2. 输入学生学号，输入待删除的科目名称并删除
+ *    若该学生不存在，则会报错并返回上一级
+ *    若要删除的科目不存在，则会报错并返回上一级
+ */
+void System::delete_interface()
+{
+    while (true)
+    {
+        std::cout << "您可以输入序号进行以下操作：" << std::endl;
+        std::cout << "1. 输入学生学号以删除成绩" << std::endl;
+        std::cout << "2. 输入学生姓名以删除成绩" << std::endl;
+        std::cout << "0. 返回上一级" << std::endl;
+        std::string operation;
+        std::cin >> operation;
+        if (operation.length() != 1)
+        {
+            error_interface();
+            continue;
+        }
+        else
+        {
+            char op;
+            op = operation[0];
+            int index_of_student;
+            switch ((int)(op - '0'))
+            {
+                case 1:
+                {
+                    std::cout << "请输入学生学号：" << std::endl;
+                    std::string newStudentID;
+                    std::cin >> newStudentID;
+                    index_of_student = find_by_student_ID(newStudentID);
+                    delete_data(index_of_student);
+                    break;
+                }
+                case 2:
+                {
+                    std::cout << "请输入学生姓名：" << std::endl;
+                    std::string newStudentName;
+                    std::cin >> newStudentName;
+                    index_of_student = find_by_student_name(newStudentName);
+                    if (is_duplicate_names(newStudentName))
+                    {
+                        std::cout << "这个姓名存在重名学生，请通过输入学号方式进行修改！" << std::endl;
+                        break;
+                    }
+                    modify_data(index_of_student);
+                    break;
+                }
+                case 0: return;
+                default: error_interface();break;
+            }
+        }
+    }
+}
 /**
  * 查询界面
  * 在该界面下进一步选择查询方式
@@ -274,7 +379,6 @@ bool System::is_duplicate_names(std::string student_name)
     return count_this_name > 1;
 }
 
-
 /**
  * 建立新的学生信息
  * 考虑到名字的多样性，本函数不检查重名现象
@@ -315,25 +419,6 @@ void System::add_data()
         {
             std::cout << "该科目成绩已录入，无法重复录入！" << std::endl;
             error_interface();
-            /*std::cout << "原成绩为：" << newStudent.get_single_score(subject_name) << std::endl;
-            std::cout << "输入\"1\"以继续操作，录入新成绩以覆盖原成绩" << std::endl;
-            std::cout << "输入其他字符取消本次操作，继续输入科目" << std::endl;
-            std::string operation;
-            std::cin >> operation;
-            if (operation == "1")
-            {
-                std::cout << "操作继续！" << std::endl;
-                std::cout << "请输入学生成绩：" << std::endl;
-                std::cin >> subject_score;
-                newStudent.modify_score(subject_name, subject_score);//在学生档案下修改成绩
-                int index_of_subject = find_by_subject_name(subject_name);
-                subj[index_of_subject].modify_by_ID(newID, subject_score);//在科目下修改该学生成绩
-                std::cout << "修改成绩成功！" << std::endl;
-            }
-            else
-            {
-                std::cout << "操作取消！" << std::endl;
-            }*/
             continue;
         }
         std::cout << "请输入科目学分和学生成绩：" << std::endl;
@@ -361,21 +446,17 @@ void System::add_data()
 }
 
 /**
- * 通过输入学生学号添加学生成绩
- * 如果输入的学号不存在，则报错并返回上一级
+ * 添加学生成绩
+ * 如果待添加信息的学生不存在，则报错并返回上一级
  * 学科成绩的有效范围为 0~100, 超出有效范围将会报错
  * 学分依课程而定，不做检测
- * 如果将要录入的课程已经被记录，则会报错并提示用户去修改界面修改
+ * 如果将要录入的课程已经被记录，则报错
  */
-void System::input_by_ID()
+void System::input_data(int index_of_student)
 {
-    std::cout << "请输入学生学号：" << std::endl;
-    std::string newStudentID;
-    std::cin >> newStudentID;
-    int index_of_student = find_by_student_ID(newStudentID);
     if (index_of_student == -1)
     {
-        std::cout << "学号为" << newStudentID << "的学生不存在！" << std::endl;
+        std::cout << "该学生不存在！" << std::endl;
         error_interface();
         return;
     }
@@ -420,118 +501,18 @@ void System::input_by_ID()
 }
 
 /**
- * 通过输入学生姓名添加学生成绩
- * 如果输入的姓名不存在，则报错并返回上一级
- * 如果存在重名学生，则跳转到输入学号修改成绩
- * 学科成绩的有效范围为 0~100, 超出有效范围将会报错
- * 学分依课程而定，不做检测
- * 如果将要录入的课程已经被记录，则会报错并提示用户去修改界面修改
- */
-void System::input_by_name()
-{
-    std::cout << "请输入学生姓名：" << std::endl;
-    std::string newStudentName;
-    std::cin >> newStudentName;
-    int index_of_student = find_by_student_ID(newStudentName);
-    if (index_of_student == -1)
-    {
-        std::cout << "姓名为" << newStudentName << "的学生不存在！" << std::endl;
-        error_interface();
-        return;
-    }
-    if (is_duplicate_names(newStudentName))
-    {
-        std::cout << "这个姓名存在重名学生，请通过输入学号方式进行添加！" << std::endl;
-        input_by_ID();
-        return;
-    }
-    while (true)
-    {
-        std::cout << "请输入科目名称（输入0以结束操作并返回上一级）：" << std::endl;
-        std::string subject_name;
-        double subject_credit, subject_score;
-        std::cin >> subject_name;
-        if (subject_name == "0")
-        {
-            std::cout << "添加信息结束！" << std::endl;
-            return;
-        }
-        if (stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
-        {
-            std::cout << "该科目成绩已录入，无法重复录入！" << std::endl;
-            error_interface();
-            continue;
-        }
-        std::cout << "请输入科目学分和学生成绩：" << std::endl;
-        std::cin >> subject_credit >> subject_score;
-        if (subject_score < 0 || subject_score > 100)
-        {
-            std::cout << "无效的成绩！请重新输入！" << std::endl;
-            continue;
-        }
-        stud[index_of_student].set_score(subject_name, subject_credit, subject_score);
-        int index_of_subject = find_by_subject_name(subject_name);
-        if (index_of_subject == -1)//新的科目
-        {
-            Subject new_subject(subject_name, subject_credit);
-            new_subject.set_student_score(stud[index_of_student].get_ID(), stud[index_of_student].get_name(),
-                                          subject_score);
-            subj.push_back(new_subject);//加入到vector中
-        }else
-        {
-            subj[index_of_subject].set_student_score(stud[index_of_student].get_ID(), stud[index_of_student].get_name(),
-                                                     subject_score);
-        }
-        std::cout << "添加科目信息成功！" << std::endl;
-
-
-
-
-        /*std::cout << "请输入要修改的科目名称及成绩：" << std::endl;
-        std::string subject_name;
-        double subject_score;
-        std::cin >> subject_name >> subject_score;
-        if (!stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
-        {
-            std::cout << "该生尚未录入该科目，无法修改！" << std::endl;
-            error_interface();
-            return;
-        }
-        stud[index_of_student].modify_score(subject_name, subject_score);
-        int index_of_subject = find_by_subject_name(subject_name);
-        subj[index_of_subject].modify_by_Name(newStudentName, subject_score);
-        std::cout << "修改成绩成功！" << std::endl;*/
-    }
-}
-
-int System::check_exist()
-{
-    return 0;
-}
-
-/**
- * 通过输入学生学号修改学生成绩
- * 如果输入的学号不存在，则报错并返回上一级
+ * 修改学生成绩
+ * 如果该学生不存在，则报错并返回上一级
  * 如果输入的科目不存在，则报错并返回上一级
  * 学科成绩的有效范围为 0~100, 超出有效范围将会报错
  * 学分不支持修改
  */
-void System::modify_by_ID()
+void System::modify_data(int index_of_student)
 {
-    std::cout << "请输入学生姓名：" << std::endl;
-    std::string newStudentName;
-    std::cin >> newStudentName;
-    int index_of_student = find_by_student_ID(newStudentName);
     if (index_of_student == -1)
     {
-        std::cout << "姓名为" << newStudentName << "的学生不存在！" << std::endl;
+        std::cout << "该学生不存在！" << std::endl;
         error_interface();
-        return;
-    }
-    if (is_duplicate_names(newStudentName))
-    {
-        std::cout << "这个姓名存在重名学生，请通过输入学号方式进行添加！" << std::endl;
-        input_by_ID();
         return;
     }
     while (true)
@@ -542,7 +523,7 @@ void System::modify_by_ID()
         std::cin >> subject_name;
         if (subject_name == "0")
         {
-            std::cout << "添加信息结束！" << std::endl;
+            std::cout << "修改成绩结束！" << std::endl;
             return;
         }
         if (!stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
@@ -565,23 +546,11 @@ void System::modify_by_ID()
     }
 }
 
-/**
- * 通过输入学生姓名修改学生成绩
- * 如果输入的姓名不存在，则报错并返回上一级
- * 如果存在重名学生，则跳转到输入学号修改成绩
- * 如果输入的科目不存在，则报错并提示用户去添加界面添加科目
- * 学科成绩的有效范围为 0~100, 超出有效范围将会报错
- * 学分不支持修改
- */
-void System::modify_by_name()
+void System::delete_data(int index_of_student)
 {
-    std::cout << "请输入学生学号：" << std::endl;
-    std::string newStudentID;
-    std::cin >> newStudentID;
-    int index_of_student = find_by_student_ID(newStudentID);
     if (index_of_student == -1)
     {
-        std::cout << "学号为" << newStudentID << "的学生不存在！" << std::endl;
+        std::cout << "该学生不存在！" << std::endl;
         error_interface();
         return;
     }
@@ -589,11 +558,10 @@ void System::modify_by_name()
     {
         std::cout << "请输入科目名称（输入0以结束操作并返回上一级）：" << std::endl;
         std::string subject_name;
-        double subject_score;
         std::cin >> subject_name;
         if (subject_name == "0")
         {
-            std::cout << "添加信息结束！" << std::endl;
+            std::cout << "删除信息结束！" << std::endl;
             return;
         }
         if (!stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
@@ -602,22 +570,10 @@ void System::modify_by_name()
             error_interface();
             continue;
         }
-        std::cout << "请输入新的学生成绩：" << std::endl;
-        std::cin >> subject_score;
-        if (subject_score < 0 || subject_score > 100)
-        {
-            std::cout << "无效的成绩！请重新输入！" << std::endl;
-            continue;
-        }
-        stud[index_of_student].modify_score(subject_name, subject_score);
-        int index_of_subject = find_by_subject_name(subject_name);
-        subj[index_of_subject].modify_by_name(stud[index_of_student].get_name(), subject_score);
-        std::cout << "修改成绩成功！" << std::endl;
+//        stud[index_of_student].modify_score(subject_name, subject_score);
+//        int index_of_subject = find_by_subject_name(subject_name);
+//        subj[index_of_subject].modify_by_ID(stud[index_of_student].get_ID(), subject_score);
+//        std::cout << "修改成绩成功！" << std::endl;
     }
-}
-
-void System::delete_data()
-{
-
 }
 
