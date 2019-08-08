@@ -19,10 +19,9 @@ public:
     double get_average_score();                                 //获取平均成绩
     int get_number_of_student();                                //获取学生人数
     void set_student_score(std::string, std::string, double);   //录入学生成绩
-    void modify_by_ID(std::string, double);                     //通过学号修改
-    void modify_by_name(std::string, double);                   //通过姓名修改
-    void calculate_average_score();                             //计算平均成绩
-    double calculate_GPA(double);                               //计算学生绩点
+    void modify_score(std::string, double);                     //修改学生成绩
+    void delete_student(std::string);                           //删除学生成绩
+    void show_student();                                        //展示学生信息
 
 private:
     std::string name;
@@ -37,6 +36,11 @@ private:
         double student_GPA;
     };
     std::vector<student> list;
+
+    void calculate_average_score();                             //计算平均成绩
+    static double calculate_GPA(double);                        //计算学生绩点
+    static bool sort_with_score(student a, student b);          //比较函数，将学生按成绩降序排序
+
 };
 
 #endif //TEXT_2_SUBJECT_H

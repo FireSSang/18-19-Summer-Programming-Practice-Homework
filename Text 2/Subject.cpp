@@ -64,13 +64,14 @@ void Subject::set_student_score(std::string studentID, std::string studentName, 
     stud.student_GPA = calculate_GPA(stud.student_score);
     list.push_back(stud);
     calculate_average_score();
+    sort(list.begin(), list.begin() + list.size(), sort_with_score);
 }
 
 /**
- * 修改某一学生成绩
- * 通过ID修改
+ * 修改某一学生
+ * 考虑到学号的唯一性，此处采用学号修改
  */
-void Subject::modify_by_ID(std::string studentID, double studentScore)
+void Subject::modify_score(std::string studentID, double studentScore)
 {
     for (int i = 0; i < list.size(); ++i)
     {
@@ -81,25 +82,58 @@ void Subject::modify_by_ID(std::string studentID, double studentScore)
         }
     }
     calculate_average_score();
+    sort(list.begin(), list.begin() + list.size(), sort_with_score);
 }
 
 /**
- * 修改某一学生成绩
- * 通过姓名修改
+ * 删除某一学生
+ * 考虑到学号的唯一性，此处采用学号删除
  */
-void Subject::modify_by_name(std::string studentName, double studentScore)
+void Subject::delete_student(std::string studentID)
 {
     for (int i = 0; i < list.size(); ++i)
     {
-        if (list[i].student_name == studentName)
+        if (list[i].student_ID == studentID)
         {
-            list[i].student_score = studentScore;
+            list.erase(list.begin() + i);
             break;
         }
     }
+    number_of_student--;
     calculate_average_score();
 }
 
+/**
+ * 按一定格式输出科目信息
+ * 科目信息包括科目名称、科目学分、平均成绩、选课人数
+ * 输出选课人数 n
+ * 以下 n 行，输出每个学生信息
+ * 包括排名、学生学号、学生姓名、学生成绩、学生GPA
+ */
+void Subject::show_student()
+{
+    std::cout << std::left;
+    std::cout << "科目名称：" << name << std::endl;
+    std::cout << "科目学分：" << std::fixed << std::setprecision(1) << credit << std::endl;
+    std::cout << "平均成绩：" << std::fixed << std::setprecision(2) << average_score << std::endl;
+    std::cout << "选课人数：" << number_of_student << std::endl;
+    std::cout << std::setw(6) << "排名 " << std::setw(18) << "学号 " << std::setw(18) << "姓名 " << std::setw(7) << "成绩 " << std::setw(7) << "GPA " << std::endl;
+    for (int i = 0; i < list.size(); ++i)
+    {
+        std::cout << std::left;
+        std::cout << std::setw(5) << i+1 << " ";
+        std::cout << std::setw(16) << list[i].student_ID << " ";
+        std::cout << std::setw(16) << list[i].student_name << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].student_score << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].student_GPA << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+
+
+
+////private
 
 /**
  * 计算本科目平均分
@@ -145,3 +179,12 @@ double Subject::calculate_GPA(double singleScore)
 }
 
 
+
+/**
+ * 比较函数
+ * 在添加学生信息后对学生的vector按成绩降序重新排序
+ */
+bool Subject::sort_with_score(student a, student b)
+{
+    return a.student_score > b.student_score;
+}

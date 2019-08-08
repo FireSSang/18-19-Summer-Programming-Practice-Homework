@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     System sys;
-    cout << "欢迎使用学生成绩管理系统v1.0 Designed by Wang Haoen" << endl;
+    cout << "欢迎使用学生成绩管理系统 Designed by Wang Haoen" << endl;
     sys.system_initialization();
     sys.guide_interface();
     sys.system_exit();

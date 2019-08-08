@@ -17,36 +17,32 @@ public:
     void system_initialization() override;
     void system_exit() override;
 
-    //分类操作
-    void classification() override;
-
     //界面
     void guide_interface() override;
     void input_interface() override;
     void modify_interface() override;
     void delete_interface() override;
-    //void query_interface() override;
+    void query_interface() override;
     void error_interface() override;
 
     //查询及相关操作
-    void query_student() override;
-    void query_subject() override;
-    void output_all_subject() override;
     void output_total_ranking() override;
-
-    //定位
-    int find_by_student_ID(std::string student_ID) override;
-    int find_by_student_name(std::string student_name) override;
-    int find_by_subject_name(std::string subject_name) override;
-
-    //判断重名
-    bool is_duplicate_names(std::string student_name) override;
 
     //输入、修改及相关操作
     void add_data() override;
     void input_data(int) override;
     void modify_data(int) override;
     void delete_data(int) override;
+    void query_student(int) override;
+    void query_subject() override;
+    void output_all_subject() override;
+
+    //定位及查重
+    int find_by_student_ID(std::string student_ID) override;
+    int find_by_student_name(std::string student_name) override;
+    int find_by_subject_name(std::string subject_name) override;
+    bool is_duplicate_names(std::string student_name) override;
+
 
 
 
@@ -54,6 +50,8 @@ public:
 private:
     std::vector<Student> stud;
     std::vector<Subject> subj;
+
+    static bool sort_with_total_score(Student, Student);
 
 };
 
