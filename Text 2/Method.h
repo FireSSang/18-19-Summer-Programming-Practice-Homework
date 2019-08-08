@@ -7,6 +7,11 @@
 
 #include <bits/stdc++.h>
 
+/**
+ * 抽象类
+ * 该类下定义了需要在 System 类中 override 的函数
+ * 在 System.cpp 下对每个函数进行详细解释
+ */
 class Method
 {
 public:

@@ -5,6 +5,9 @@
 #include <bits/stdc++.h>
 #include "Subject.h"
 
+/**
+ * 无参的构造函数
+ */
 Subject::Subject()
 {
     credit = 0;
@@ -12,6 +15,10 @@ Subject::Subject()
     number_of_student = 0;
 }
 
+/**
+ * 含参的构造函数
+ * 创建名为 newName ， 学分为 newCredit 的科目
+ */
 Subject::Subject(std::string newName, double newCredit)
 {
     name = newName;
@@ -20,31 +27,25 @@ Subject::Subject(std::string newName, double newCredit)
     number_of_student = 0;
 }
 
-void Subject::set_subject_name(std::string newName)
-{
-    name = newName;
-}
-
+/**
+ * 返回科目名称
+ */
 std::string Subject::get_subject_name()
 {
     return name;
 }
 
-void Subject::set_subject_credit(double newCredit)
-{
-    credit = newCredit;
-}
-
+/**
+ * 返回科目学分
+ */
 double Subject::get_subject_credit()
 {
     return credit;
 }
 
-double Subject::get_average_score()
-{
-    return average_score;
-}
-
+/**
+ * 返回选课人数
+ */
 int Subject::get_number_of_student()
 {
     return number_of_student;
@@ -64,12 +65,14 @@ void Subject::set_student_score(std::string studentID, std::string studentName, 
     stud.student_GPA = calculate_GPA(stud.student_score);
     list.push_back(stud);
     calculate_average_score();
-    sort(list.begin(), list.begin() + list.size(), sort_with_score);
+    sort(list.begin(), list.begin() + list.size(), sort_with_score);//排序
 }
 
 /**
- * 修改某一学生
+ * 修改某一学生成绩
  * 考虑到学号的唯一性，此处采用学号修改
+ * 修改成绩并计算 GPA
+ * 重新统计平均分
  */
 void Subject::modify_score(std::string studentID, double studentScore)
 {
@@ -78,16 +81,18 @@ void Subject::modify_score(std::string studentID, double studentScore)
         if (list[i].student_ID == studentID)
         {
             list[i].student_score = studentScore;
+            list[i].student_GPA = calculate_GPA(list[i].student_score);
             break;
         }
     }
     calculate_average_score();
-    sort(list.begin(), list.begin() + list.size(), sort_with_score);
+    sort(list.begin(), list.begin() + list.size(), sort_with_score);//排序
 }
 
 /**
  * 删除某一学生
  * 考虑到学号的唯一性，此处采用学号删除
+ * 无需排序，因为删除前序列有序
  */
 void Subject::delete_student(std::string studentID)
 {
@@ -129,9 +134,6 @@ void Subject::show_information()
     }
     std::cout << std::endl;
 }
-
-
-
 
 ////private
 
@@ -177,8 +179,6 @@ double Subject::calculate_GPA(double singleScore)
         cred = 0;
     return cred;
 }
-
-
 
 /**
  * 比较函数

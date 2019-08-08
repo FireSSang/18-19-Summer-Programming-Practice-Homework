@@ -22,7 +22,7 @@ void System::system_initialization()
     {
         in >> student_ID >> student_name;
         in >> number_of_subject;
-        Student new_student(student_ID, student_name, 0);
+        Student new_student(student_ID, student_name);
         for (int i = 0; i < number_of_subject; ++i)
         {
             in >> subject_name;
@@ -40,11 +40,10 @@ void System::system_initialization()
                 subj[index_of_subject].set_student_score(student_ID, student_name, subject_score);
             }
         }
-        if (number_of_subject != 0)
+        if (number_of_subject != 0)//解决文件读取最后一行的异常现象
             stud.push_back(new_student);
         number_of_subject = 0;
     }
-    //stud.pop_back();
     in.close();
     std::cout << "系统初始化完成！" << std::endl;
 }
@@ -58,7 +57,7 @@ void System::system_exit()
 {
     std::cout << "系统正在保存数据，请稍候..." << std::endl;
     std::ofstream out("data.txt");
-    out.clear();
+    out.clear();//清空重写
     std::string subject_name;
     double subject_credit, subject_score;
     for (int i = 0; i < stud.size(); ++i)
@@ -67,7 +66,7 @@ void System::system_exit()
         out << stud[i].get_number_of_subject() << std::endl;
         for (int j = 0; j < stud[i].get_number_of_subject(); ++j)
         {
-            stud[i].get_subject(j, subject_name, subject_credit, subject_score);
+            stud[i].get_subject(j, subject_name, subject_credit, subject_score);//因为list的内容是private部分，无法直接访问
             out << subject_name << " ";
             out << subject_credit << " " << subject_score << std::endl;
         }
@@ -193,11 +192,12 @@ void System::input_interface()
 /**
  * 修改学生成绩界面
  * 该函数下有两种操作：
- * 1. 输入学生姓名，输入待修改的科目名称和新成绩并修改
+ * 1. 输入学生学号，输入待修改的科目名称和新成绩并修改
  *    若该学生不存在，则会报错并返回上一级
  *    若要修改的科目不存在，则会报错并返回上一级
- * 2. 输入学生学号，输入待修改的科目名称和新成绩并修改
+ * 2. 输入学生姓名，输入待修改的科目名称和新成绩并修改
  *    若该学生不存在，则会报错并返回上一级
+ *    若重名，则报错
  *    若要修改的科目不存在，则会报错并返回上一级
  */
 void System::modify_interface()
@@ -255,11 +255,12 @@ void System::modify_interface()
 /**
  * 删除学生成绩界面
  * 该函数下有两种操作：
- * 1. 输入学生姓名，输入待删除的科目名称并删除
+ * 1. 输入学生学号，输入待删除的科目名称并删除
  *    若该学生不存在，则会报错并返回上一级
  *    若要删除的科目不存在，则会报错并返回上一级
- * 2. 输入学生学号，输入待删除的科目名称并删除
+ * 2. 输入学生姓名，输入待删除的科目名称并删除
  *    若该学生不存在，则会报错并返回上一级
+ *    若重名，则报错
  *    若要删除的科目不存在，则会报错并返回上一级
  */
 void System::delete_interface()
@@ -317,7 +318,7 @@ void System::delete_interface()
  * 查询学生信息界面
  * 输入学生学号或姓名
  * 若该学生不存在，则会报错并返回上一级
- * 若输入姓名时重名，则报错
+ * 若重名，则报错
  */
 void System::query_interface()
 {
@@ -383,12 +384,9 @@ void System::error_interface()
     std::cin >> s;
 }
 
-
-
-
 /**
  * 建立新的学生信息
- * 考虑到名字的多样性，本函数不检查重名现象
+ * 考虑到名字的多样性，本函数录入学生信息时不检查重名现象
  * 如果输入的学号已经存在，将会报错
  * 学科成绩的有效范围为 0~100, 超出有效范围将会报错
  * 学分依课程而定，不做检测
@@ -408,7 +406,7 @@ void System::add_data()
     }
     std::cout << "请输入姓名：";
     std::cin >> newName;
-    Student newStudent(newID, newName, 0);
+    Student newStudent(newID, newName);
 
     std::cout << "请按照以下提示输入该生成绩信息：" << std::endl;
     while (true)
@@ -420,7 +418,7 @@ void System::add_data()
         if (subject_name == "0")
         {
             stud.push_back(newStudent);
-            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);//排序
             sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
             for (int i = 0; i < stud.size(); ++i)
             {
@@ -482,7 +480,7 @@ void System::input_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "添加信息结束！" << std::endl;
-            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);//排序
             sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
             for (int i = 0; i < stud.size(); ++i)
             {
@@ -543,7 +541,7 @@ void System::modify_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "修改成绩结束！" << std::endl;
-            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);//排序
             sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
             for (int i = 0; i < stud.size(); ++i)
             {
@@ -594,7 +592,7 @@ void System::delete_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "删除信息结束！" << std::endl;
-            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);//排序
             sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
             for (int i = 0; i < stud.size(); ++i)
             {
@@ -666,6 +664,7 @@ void System::query_subject()
 /**
  * 展示全部科目信息
  * 按学分降序展示
+ * 具体展示各式参见 Subject 类下的 show_information() 函数的注释
  */
 void System::output_all_subject()
 {
@@ -759,10 +758,7 @@ bool System::is_duplicate_names(std::string student_name)
     return count_this_name > 1;
 }
 
-
-
 ////private
-
 
 /**
  * 比较函数，用于对学生进行排序
@@ -806,4 +802,3 @@ bool System::sort_with_credit(Subject a, Subject b)
         return a.get_number_of_student() > b.get_number_of_student();
     return a.get_subject_credit() > b.get_subject_credit();
 }
-

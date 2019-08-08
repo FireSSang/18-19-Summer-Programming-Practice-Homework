@@ -10,6 +10,11 @@
 #include "Student.h"
 #include "Subject.h"
 
+/**
+ * 操作系统类
+ * 该类下 override 了抽象类 Method 中的方法
+ * 在 System.cpp 下对每个函数进行详细解释
+ */
 class System : Method
 {
 public:
@@ -45,6 +50,7 @@ private:
     std::vector<Student> stud;
     std::vector<Subject> subj;
 
+    //比较函数
     static bool sort_with_total_score(Student, Student);
     static bool sort_with_credit(Subject, Subject);
 };
