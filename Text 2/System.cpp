@@ -40,9 +40,11 @@ void System::system_initialization()
                 subj[index_of_subject].set_student_score(student_ID, student_name, subject_score);
             }
         }
-        stud.push_back(new_student);
+        if (number_of_subject != 0)
+            stud.push_back(new_student);
+        number_of_subject = 0;
     }
-    stud.pop_back();
+    //stud.pop_back();
     in.close();
     std::cout << "系统初始化完成！" << std::endl;
 }
