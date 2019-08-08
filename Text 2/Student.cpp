@@ -140,23 +140,23 @@ int Student::get_number_of_subject()
  * 以下 n 行，输出每科目信息
  * 包括科目名称、科目学分、科目成绩、科目GPA
  */
-void Student::show_subject()
+void Student::show_information()
 {
     std::cout << std::left;
     std::cout << "年级排名：" << rank << std::endl;
     std::cout << "学生学号：" << ID << std::endl;
     std::cout << "学生姓名：" << name << std::endl;
     std::cout << "加权成绩：" << std::fixed << std::setprecision(1) << total_score << std::endl;
-    std::cout << "  GPA  ：" << std::fixed << std::setprecision(1) << GPA << std::endl;
+    std::cout << " G P A ：" << std::fixed << std::setprecision(1) << GPA << std::endl;
     std::cout << "总修学分：" << std::fixed << std::setprecision(1) << total_credit << std::endl;
     std::cout << "选课数量：" << number_of_subject << std::endl;
-    std::cout << std::setw(22) << "科目名称 " << std::setw(7) << "学分 " << std::setw(7) << "成绩 " << std::setw(7) << "GPA " << std::endl;
+    std::cout << std::setw(20) << "科目名称" << " " << std::setw(6) << "学分" << " " << std::setw(6) << "成绩" << " " << std::setw(6) << "GPA " << std::endl;
     for (int i = 0; i < list.size(); ++i)
     {
         std::cout << std::left;
         std::cout << std::setw(20) << list[i].subject_name << " ";
-        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].subject_credit << " ";
-        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].subject_score << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(2) << list[i].subject_credit << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(2) << list[i].subject_score << " ";
         std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].subject_GPA << std::endl;
     }
     std::cout << std::endl;
@@ -175,6 +175,14 @@ bool Student::check_subject(std::string subjectName)
     }
     return false;
 }
+
+void Student::get_subject(int index, std::string& subjectName, double& subjectCredit, double& subjectScore)
+{
+    subjectName = list[index].subject_name;
+    subjectCredit = list[index].subject_credit;
+    subjectScore = list[index].subject_score;
+}
+
 
 ////private
 
@@ -244,6 +252,9 @@ bool Student::sort_with_credit(Student::subject a, Student::subject b)
 {
     return a.subject_credit > b.subject_credit;
 }
+
+
+
 
 
 

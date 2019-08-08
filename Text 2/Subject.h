@@ -21,7 +21,7 @@ public:
     void set_student_score(std::string, std::string, double);   //录入学生成绩
     void modify_score(std::string, double);                     //修改学生成绩
     void delete_student(std::string);                           //删除学生成绩
-    void show_student();                                        //展示学生信息
+    void show_information();                                    //展示学生信息
 
 private:
     std::string name;

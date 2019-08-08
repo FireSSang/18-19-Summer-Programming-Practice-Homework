@@ -22,9 +22,6 @@ public:
     virtual void query_interface() = 0;
     virtual void error_interface() = 0;
 
-    //查询及相关操作
-    virtual void output_total_ranking() = 0;
-
     //操作
     virtual void add_data() = 0;
     virtual void input_data(int) = 0;
@@ -33,6 +30,7 @@ public:
     virtual void query_student(int) = 0;
     virtual void query_subject() = 0;
     virtual void output_all_subject() = 0;
+    virtual void output_total_ranking() = 0;
 
     //定位及查重
     virtual int find_by_student_ID(std::string) = 0;

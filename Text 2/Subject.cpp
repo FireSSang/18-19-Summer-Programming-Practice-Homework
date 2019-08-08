@@ -110,18 +110,18 @@ void Subject::delete_student(std::string studentID)
  * 以下 n 行，输出每个学生信息
  * 包括排名、学生学号、学生姓名、学生成绩、学生GPA
  */
-void Subject::show_student()
+void Subject::show_information()
 {
     std::cout << std::left;
     std::cout << "科目名称：" << name << std::endl;
     std::cout << "科目学分：" << std::fixed << std::setprecision(1) << credit << std::endl;
     std::cout << "平均成绩：" << std::fixed << std::setprecision(2) << average_score << std::endl;
     std::cout << "选课人数：" << number_of_student << std::endl;
-    std::cout << std::setw(6) << "排名 " << std::setw(18) << "学号 " << std::setw(18) << "姓名 " << std::setw(7) << "成绩 " << std::setw(7) << "GPA " << std::endl;
+    std::cout << std::setw(6) << "排名" << " " << std::setw(16) << " " << "学号" << std::setw(16) << "姓名" << " " << std::setw(6) << "成绩" << " " << std::setw(6) << "GPA " << std::endl;
     for (int i = 0; i < list.size(); ++i)
     {
         std::cout << std::left;
-        std::cout << std::setw(5) << i+1 << " ";
+        std::cout << std::setw(6) << i+1 << " ";
         std::cout << std::setw(16) << list[i].student_ID << " ";
         std::cout << std::setw(16) << list[i].student_name << " ";
         std::cout << std::setw(6) << std::fixed << std::setprecision(1) << list[i].student_score << " ";

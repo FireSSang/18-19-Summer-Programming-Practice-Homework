@@ -13,8 +13,37 @@
 void System::system_initialization()
 {
     std::cout << "系统正在初始化，请稍候..." << std::endl;
-
-
+    std::ifstream in("data.txt");
+    std::string student_ID, student_name;
+    int number_of_subject;
+    std::string subject_name;
+    double subject_credit, subject_score;
+    while (in.peek() != EOF)
+    {
+        in >> student_ID >> student_name;
+        in >> number_of_subject;
+        Student new_student(student_ID, student_name, 0);
+        for (int i = 0; i < number_of_subject; ++i)
+        {
+            in >> subject_name;
+            in >> subject_credit >> subject_score;
+            new_student.set_score(subject_name, subject_credit, subject_score);
+            int index_of_subject = find_by_subject_name(subject_name);
+            if (index_of_subject == -1)//新的科目
+            {
+                Subject new_subject(subject_name, subject_credit);
+                new_subject.set_student_score(student_ID, student_name, subject_score);
+                subj.push_back(new_subject);//加入到vector中
+            }
+            else
+            {
+                subj[index_of_subject].set_student_score(student_ID, student_name, subject_score);
+            }
+        }
+        stud.push_back(new_student);
+    }
+    stud.pop_back();
+    in.close();
     std::cout << "系统初始化完成！" << std::endl;
 }
 
@@ -26,9 +55,22 @@ void System::system_initialization()
 void System::system_exit()
 {
     std::cout << "系统正在保存数据，请稍候..." << std::endl;
-
-
-
+    std::ofstream out("data.txt");
+    out.clear();
+    std::string subject_name;
+    double subject_credit, subject_score;
+    for (int i = 0; i < stud.size(); ++i)
+    {
+        out << stud[i].get_ID() << " " << stud[i].get_name() << " ";
+        out << stud[i].get_number_of_subject() << std::endl;
+        for (int j = 0; j < stud[i].get_number_of_subject(); ++j)
+        {
+            stud[i].get_subject(j, subject_name, subject_credit, subject_score);
+            out << subject_name << " ";
+            out << subject_credit << " " << subject_score << std::endl;
+        }
+    }
+    out.close();
     std::cout << "数据保存成功！" << std::endl;
     std::cout << "期待您的下次使用！" << std::endl;
 }
@@ -341,10 +383,6 @@ void System::error_interface()
 
 
 
-void System::output_total_ranking()
-{
-
-}
 
 /**
  * 建立新的学生信息
@@ -380,6 +418,12 @@ void System::add_data()
         if (subject_name == "0")
         {
             stud.push_back(newStudent);
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
+            for (int i = 0; i < stud.size(); ++i)
+            {
+                stud[i].set_rank(i+1);
+            }
             std::cout << "添加学生信息结束！" << std::endl;
             return;
         }
@@ -436,6 +480,12 @@ void System::input_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "添加信息结束！" << std::endl;
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
+            for (int i = 0; i < stud.size(); ++i)
+            {
+                stud[i].set_rank(i+1);
+            }
             return;
         }
         if (stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
@@ -491,6 +541,12 @@ void System::modify_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "修改成绩结束！" << std::endl;
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
+            for (int i = 0; i < stud.size(); ++i)
+            {
+                stud[i].set_rank(i+1);
+            }
             return;
         }
         if (!stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
@@ -536,6 +592,12 @@ void System::delete_data(int index_of_student)
         if (subject_name == "0")
         {
             std::cout << "删除信息结束！" << std::endl;
+            sort(stud.begin(), stud.begin() + stud.size(), sort_with_total_score);
+            sort(subj.begin(), subj.begin() + subj.size(), sort_with_credit);
+            for (int i = 0; i < stud.size(); ++i)
+            {
+                stud[i].set_rank(i+1);
+            }
             return;
         }
         if (!stud[index_of_student].check_subject(subject_name))//检测是否已经录入此科目
@@ -565,7 +627,7 @@ void System::query_student(int index_of_student)
         error_interface();
         return;
     }
-    stud[index_of_student].show_subject();
+    stud[index_of_student].show_information();
 }
 
 /**
@@ -595,20 +657,43 @@ void System::query_subject()
             error_interface();
             continue;
         }
-        subj[index_of_subject].show_student();
+        subj[index_of_subject].show_information();
     }
 }
 
 /**
- * 展示全部学生信息
- * 按加权成绩降序排名展示
+ * 展示全部科目信息
+ * 按学分降序展示
  */
 void System::output_all_subject()
 {
+    std::cout << "成绩总览如下：" << std::endl << std::endl;
+    for (int i = 0; i < subj.size(); ++i)
+    {
+        subj[i].show_information();
+    }
+}
+
+/**
+ * 输出年级排名
+ * 按年级排名升序排列
+ * 信息包括：
+ * 排名 ID 姓名 加权成绩 GPA
+ */
+void System::output_total_ranking()
+{
+    std::cout << "年级排名如下：" << std::endl << std::endl;
+    std::cout << std::setw(6) << "排名 " << std::setw(18) << "学号 " << std::setw(18) << "姓名 " << std::setw(7) << "成绩 " << std::setw(7) << "GPA " << std::endl;
     for (int i = 0; i < stud.size(); ++i)
     {
-        stud[i].show_subject();
+        std::cout << std::left;
+        std::cout << std::setw(5) << stud[i].get_rank() << " ";
+        std::cout << std::setw(16) << stud[i].get_ID() << " ";
+        std::cout << std::setw(16) << stud[i].get_name() << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << stud[i].get_total_score() << " ";
+        std::cout << std::setw(6) << std::fixed << std::setprecision(1) << stud[i].get_GPA() << std::endl;
     }
+    std::cout << std::endl;
 }
 
 /**
@@ -678,29 +763,45 @@ bool System::is_duplicate_names(std::string student_name)
 
 
 /**
- * 比较函数
- * 按加权成绩降序排列
- * 加权成绩一般不会相同
- * 相同时按总修学分降序排列
- * 总修学分也相同时按选课数降序排列
- * 再相同按学号升序排列
+ * 比较函数，用于对学生进行排序
+ * 按加权成绩降序排列（加权成绩一般不会相同）
+ * 加权成绩相同时按GPA降序排列
+ * GPA相同时总修学分降序排列
+ * 总修学分相同时按选课数降序排列
+ * 选课数相同时按学号升序排列
  * 学号总不能相同了
- * 要是真有长度不同的学号就自生自灭吧 这我写不了 谁能写谁写吧
+ * 要是真有长度不同的学号...这我写不了 谁能写谁写吧
  */
 bool System::sort_with_total_score(Student a, Student b)
 {
     if (a.get_total_score() == b.get_total_score())
     {
-        if (a.get_total_credit() == b.get_total_credit())
+        if (a.get_GPA() == b.get_GPA())
         {
-            if (a.get_number_of_subject() == b.get_number_of_subject())
+            if (a.get_total_credit() == b.get_total_credit())
             {
-                return a.get_ID() < b.get_ID();
+                if (a.get_number_of_subject() == b.get_number_of_subject())
+                {
+                    return a.get_ID() < b.get_ID();
+                }
+                return a.get_number_of_subject() > b.get_number_of_subject();
             }
-            return a.get_number_of_subject() > b.get_number_of_subject();
+            return a.get_total_credit() > b.get_total_credit();
         }
-        return a.get_total_credit() > b.get_total_credit();
+        return a.get_GPA() > b.get_GPA();
     }
     return a.get_total_score() > b.get_total_score();
+}
+
+/**
+ * 比较函数，用于对学科进行排序
+ * 按学分降序排序
+ * 学分相同则按选课人数降序排序
+ */
+bool System::sort_with_credit(Subject a, Subject b)
+{
+    if (a.get_subject_credit() == b.get_subject_credit())
+        return a.get_number_of_student() > b.get_number_of_student();
+    return a.get_subject_credit() > b.get_subject_credit();
 }
 

@@ -25,10 +25,7 @@ public:
     void query_interface() override;
     void error_interface() override;
 
-    //查询及相关操作
-    void output_total_ranking() override;
-
-    //输入、修改及相关操作
+    //操作
     void add_data() override;
     void input_data(int) override;
     void modify_data(int) override;
@@ -36,6 +33,7 @@ public:
     void query_student(int) override;
     void query_subject() override;
     void output_all_subject() override;
+    void output_total_ranking() override;
 
     //定位及查重
     int find_by_student_ID(std::string student_ID) override;
@@ -43,16 +41,12 @@ public:
     int find_by_subject_name(std::string subject_name) override;
     bool is_duplicate_names(std::string student_name) override;
 
-
-
-
-
 private:
     std::vector<Student> stud;
     std::vector<Subject> subj;
 
     static bool sort_with_total_score(Student, Student);
-
+    static bool sort_with_credit(Subject, Subject);
 };
 
 #endif //TEXT_2_SYSTEM_H
