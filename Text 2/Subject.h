@@ -45,7 +45,6 @@ private:
     void calculate_average_score();                             //计算平均成绩
     static double calculate_GPA(double);                        //计算学生绩点
     static bool sort_with_score(student a, student b);          //比较函数，将学生按成绩降序排序
-
 };
 
 #endif //TEXT_2_SUBJECT_H

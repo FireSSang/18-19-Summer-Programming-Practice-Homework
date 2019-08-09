@@ -684,11 +684,11 @@ void System::output_all_subject()
 void System::output_total_ranking()
 {
     std::cout << "年级排名如下：" << std::endl << std::endl;
-    std::cout << std::setw(6) << "排名 " << std::setw(18) << "学号 " << std::setw(18) << "姓名 " << std::setw(7) << "成绩 " << std::setw(7) << "GPA " << std::endl;
+    std::cout << std::setw(6) << "排名" << " " << std::setw(16) << "学号" << " " << std::setw(16) << "姓名" << " " << std::setw(6) << "成绩" << " " << std::setw(6) << "GPA " << std::endl;
     for (int i = 0; i < stud.size(); ++i)
     {
         std::cout << std::left;
-        std::cout << std::setw(5) << stud[i].get_rank() << " ";
+        std::cout << std::setw(6) << stud[i].get_rank() << " ";
         std::cout << std::setw(16) << stud[i].get_ID() << " ";
         std::cout << std::setw(16) << stud[i].get_name() << " ";
         std::cout << std::setw(6) << std::fixed << std::setprecision(1) << stud[i].get_total_score() << " ";
